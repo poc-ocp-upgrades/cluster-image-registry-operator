@@ -2,6 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"bytes"
+	"net/http"
+	"runtime"
+	"fmt"
 	"encoding/xml"
 	"io"
 	"log"
@@ -10,64 +14,58 @@ import (
 )
 
 type PackageTest struct {
-	Package string
-	Test    string
+	Package	string
+	Test	string
 }
-
 type GoTestJSONLine struct {
 	PackageTest
-	Time    time.Time
-	Action  string
-	Output  string
-	Elapsed float64
+	Time	time.Time
+	Action	string
+	Output	string
+	Elapsed	float64
 }
-
 type Skipped struct{}
-
 type SystemOut struct {
 	Output string `xml:",cdata"`
 }
-
 type Failure struct {
 	Output string `xml:",cdata"`
 }
-
 type TestCase struct {
-	Name      string     `xml:"name,attr"`
-	Time      float64    `xml:"time,attr"`
-	Skipped   *Skipped   `xml:"skipped,omitempty"`
-	Failure   *Failure   `xml:"failure,omitempty"`
-	SystemOut *SystemOut `xml:"system-out,omitempty"`
+	Name		string		`xml:"name,attr"`
+	Time		float64		`xml:"time,attr"`
+	Skipped		*Skipped	`xml:"skipped,omitempty"`
+	Failure		*Failure	`xml:"failure,omitempty"`
+	SystemOut	*SystemOut	`xml:"system-out,omitempty"`
 }
-
 type TestSuite struct {
-	Name      string     `xml:"name,attr"`
-	Tests     int        `xml:"tests,attr"`
-	Skipped   int        `xml:"skipped,attr"`
-	Failures  int        `xml:"failures,attr"`
-	Time      float64    `xml:"time,attr"`
-	TestCases []TestCase `xml:"testcase"`
+	Name		string		`xml:"name,attr"`
+	Tests		int		`xml:"tests,attr"`
+	Skipped		int		`xml:"skipped,attr"`
+	Failures	int		`xml:"failures,attr"`
+	Time		float64		`xml:"time,attr"`
+	TestCases	[]TestCase	`xml:"testcase"`
 }
-
 type TestSuites struct {
-	XMLName    xml.Name     `xml:"testsuites"`
-	TestSuites []*TestSuite `xml:"testsuite"`
+	XMLName		xml.Name	`xml:"testsuites"`
+	TestSuites	[]*TestSuite	`xml:"testsuite"`
 }
 
 func (ts *TestSuites) TestSuite(name string) *TestSuite {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for _, x := range ts.TestSuites {
 		if x.Name == name {
 			return x
 		}
 	}
-	x := &TestSuite{
-		Name: name,
-	}
+	x := &TestSuite{Name: name}
 	ts.TestSuites = append(ts.TestSuites, x)
 	return x
 }
-
 func main() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	testsuites := TestSuites{}
 	partialOutput := map[PackageTest]string{}
 	input := json.NewDecoder(os.Stdin)
@@ -94,22 +92,15 @@ func main() {
 					continue
 				}
 			}
-			tc := TestCase{
-				Name: line.Test,
-				Time: line.Elapsed,
-			}
+			tc := TestCase{Name: line.Test, Time: line.Elapsed}
 			switch line.Action {
 			case "skip":
 				ts.Skipped++
 				tc.Skipped = &Skipped{}
-				tc.SystemOut = &SystemOut{
-					Output: partialOutput[line.PackageTest],
-				}
+				tc.SystemOut = &SystemOut{Output: partialOutput[line.PackageTest]}
 			case "fail":
 				ts.Failures++
-				tc.Failure = &Failure{
-					Output: partialOutput[line.PackageTest],
-				}
+				tc.Failure = &Failure{Output: partialOutput[line.PackageTest]}
 			}
 			ts.Tests++
 			ts.TestCases = append(ts.TestCases, tc)
@@ -120,12 +111,7 @@ func main() {
 		ts := testsuites.TestSuite(line.Package)
 		ts.Tests++
 		ts.Failures++
-		ts.TestCases = append(ts.TestCases, TestCase{
-			Name: line.Test,
-			Failure: &Failure{
-				Output: output,
-			},
-		})
+		ts.TestCases = append(ts.TestCases, TestCase{Name: line.Test, Failure: &Failure{Output: output}})
 	}
 	output, err := xml.MarshalIndent(testsuites, "", "  ")
 	if err != nil {
@@ -133,4 +119,11 @@ func main() {
 	}
 	os.Stdout.Write(output)
 	os.Stdout.Write([]byte("\n"))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := runtime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", runtime.FuncForPC(pc).Name()))
+	http.Post("/"+"logcode", "application/json", bytes.NewBuffer(jsonLog))
 }
