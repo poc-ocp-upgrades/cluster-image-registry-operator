@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"regexp"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -13,6 +12,8 @@ import (
 type PodLog []string
 
 func (log PodLog) Contains(re *regexp.Regexp) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for _, line := range log {
 		if re.MatchString(line) {
 			return true
@@ -24,6 +25,8 @@ func (log PodLog) Contains(re *regexp.Regexp) bool {
 type PodSetLogs map[string]PodLog
 
 func (psl PodSetLogs) Contains(re *regexp.Regexp) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for _, podlog := range psl {
 		if podlog.Contains(re) {
 			return true
@@ -31,20 +34,17 @@ func (psl PodSetLogs) Contains(re *regexp.Regexp) bool {
 	}
 	return false
 }
-
 func GetLogsByLabelSelector(client *Clientset, namespace string, labelSelector *metav1.LabelSelector) (PodSetLogs, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	selector, err := metav1.LabelSelectorAsSelector(labelSelector)
 	if err != nil {
 		return nil, err
 	}
-
-	podList, err := client.Pods(namespace).List(metav1.ListOptions{
-		LabelSelector: selector.String(),
-	})
+	podList, err := client.Pods(namespace).List(metav1.ListOptions{LabelSelector: selector.String()})
 	if err != nil {
 		return nil, err
 	}
-
 	podLogs := make(PodSetLogs)
 	for _, pod := range podList.Items {
 		var podLog PodLog
@@ -68,8 +68,9 @@ func GetLogsByLabelSelector(client *Clientset, namespace string, labelSelector *
 	}
 	return podLogs, nil
 }
-
 func DumpPodLogs(logger Logger, podLogs PodSetLogs) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if len(podLogs) > 0 {
 		for pod, logs := range podLogs {
 			logger.Logf("=== logs for pod/%s", pod)

@@ -2,41 +2,15 @@ package strategy
 
 import (
 	"testing"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	imageregistryv1 "github.com/openshift/cluster-image-registry-operator/pkg/apis/imageregistry/v1"
 )
 
 func TestOverride(t *testing.T) {
-	o := &imageregistryv1.Config{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:            "foo",
-			ResourceVersion: "12345",
-			Annotations: map[string]string{
-				"hello": "world",
-			},
-		},
-		Spec: imageregistryv1.ImageRegistrySpec{
-			HTTPSecret: "secret",
-		},
-	}
-	n := &imageregistryv1.Config{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: "foo",
-			Annotations: map[string]string{
-				"foo": "bar",
-			},
-			OwnerReferences: []metav1.OwnerReference{
-				{
-					Name: "owner-name",
-				},
-			},
-		},
-		Spec: imageregistryv1.ImageRegistrySpec{
-			HTTPSecret: "new-secret",
-		},
-	}
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	o := &imageregistryv1.Config{ObjectMeta: metav1.ObjectMeta{Name: "foo", ResourceVersion: "12345", Annotations: map[string]string{"hello": "world"}}, Spec: imageregistryv1.ImageRegistrySpec{HTTPSecret: "secret"}}
+	n := &imageregistryv1.Config{ObjectMeta: metav1.ObjectMeta{Name: "foo", Annotations: map[string]string{"foo": "bar"}, OwnerReferences: []metav1.OwnerReference{{Name: "owner-name"}}}, Spec: imageregistryv1.ImageRegistrySpec{HTTPSecret: "new-secret"}}
 	changed, err := Override(o, n)
 	if err != nil {
 		t.Fatal(err)

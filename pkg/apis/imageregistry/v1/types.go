@@ -3,253 +3,105 @@ package v1
 import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	operatorsv1api "github.com/openshift/api/operator/v1"
 )
 
 const (
-	// DefaultRouteName is the name of the default route created for the registry
-	// when a default route is requested from the operator
-	DefaultRouteName = "default-route"
-
-	// ImageRegistryName is the name of the image-registry workload resource (deployment)
-	ImageRegistryName = "image-registry"
-
-	// ImageRegistryResourceName is the name of the image registry config instance
-	ImageRegistryResourceName = "cluster"
-
-	// ImageRegistryCertificatesName is the name of the configmap that is managed by the
-	// registry operator and mounted into the registry pod, to provide additional
-	// CAs to be trusted during image pullthrough
-	ImageRegistryCertificatesName = ImageRegistryName + "-certificates"
-
-	// ImageRegistryPrivateConfiguration is the name of a secret that is managed by the
-	// registry operator and which provides credentials to the registry for things like
-	// accessing S3 storage
-	ImageRegistryPrivateConfiguration = ImageRegistryName + "-private-configuration"
-
-	// ImageRegistryPrivateConfigurationUser is the name of a secret that is managed by
-	// the administrator and which provides credentials to the registry for things like
-	// accessing S3 storage.  This content takes precedence over content the operator
-	// automatically pulls from other locations, and it is merged into ImageRegistryPrivateConfiguration
-	ImageRegistryPrivateConfigurationUser = ImageRegistryPrivateConfiguration + "-user"
-
-	// ImageRegistryOperatorNamespace is the namespace containing the registry operator
-	// and the registry itself
-	ImageRegistryOperatorNamespace = "openshift-image-registry"
-
-	// ImageRegistryClusterOperatorResourceName is the name of the clusteroperator resource
-	// that reflects the registry operator status.
-	ImageRegistryClusterOperatorResourceName = "image-registry"
-
-	// Status Conditions
-
-	// OperatorStatusTypeRemoved denotes that the image-registry instance has been
-	// removed
-	OperatorStatusTypeRemoved = "Removed"
-
-	// StorageExists denotes whether or not the registry storage medium exists
-	StorageExists = "StorageExists"
-
-	// StorageTagged denotes whether or not the registry storage medium
-	// that we created was tagged correctly
-	StorageTagged = "StorageTagged"
-
-	// StorageEncrypted denotes whether or not the registry storage medium
-	// that we created has encryption enabled
-	StorageEncrypted = "StorageEncrypted"
-
-	// StorageIncompleteUploadCleanupEnabled denotes whethere or not the registry storage
-	// medium is configured to automatically cleanup incomplete uploads
-	StorageIncompleteUploadCleanupEnabled = "StorageIncompleteUploadCleanupEnabled"
-
-	// VersionAnnotation reflects the version of the registry that this deployment
-	// is running.
-	VersionAnnotation = "release.openshift.io/version"
+	DefaultRouteName				= "default-route"
+	ImageRegistryName				= "image-registry"
+	ImageRegistryResourceName			= "cluster"
+	ImageRegistryCertificatesName			= ImageRegistryName + "-certificates"
+	ImageRegistryPrivateConfiguration		= ImageRegistryName + "-private-configuration"
+	ImageRegistryPrivateConfigurationUser		= ImageRegistryPrivateConfiguration + "-user"
+	ImageRegistryOperatorNamespace			= "openshift-image-registry"
+	ImageRegistryClusterOperatorResourceName	= "image-registry"
+	OperatorStatusTypeRemoved			= "Removed"
+	StorageExists					= "StorageExists"
+	StorageTagged					= "StorageTagged"
+	StorageEncrypted				= "StorageEncrypted"
+	StorageIncompleteUploadCleanupEnabled		= "StorageIncompleteUploadCleanupEnabled"
+	VersionAnnotation				= "release.openshift.io/version"
 )
 
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
 type ConfigList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata"`
-	Items           []Config `json:"items"`
+	metav1.TypeMeta	`json:",inline"`
+	metav1.ListMeta	`json:"metadata"`
+	Items		[]Config	`json:"items"`
 }
-
-// +genclient
-// +genclient:nonNamespaced
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
-// Config is the configuration object for a registry instance managed by
-// the registry operator
 type Config struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata"`
-	Spec              ImageRegistrySpec   `json:"spec"`
-	Status            ImageRegistryStatus `json:"status"`
+	metav1.TypeMeta		`json:",inline"`
+	metav1.ObjectMeta	`json:"metadata"`
+	Spec			ImageRegistrySpec	`json:"spec"`
+	Status			ImageRegistryStatus	`json:"status"`
 }
-
 type ImageRegistrySpec struct {
-	// ManagementState indicates whether the registry instance represented
-	// by this config instance is under operator management or not.  Valid
-	// values are Managed, Unmanaged, and Removed
-	ManagementState operatorsv1api.ManagementState `json:"managementState"`
-
-	// HTTPSecret is the value needed by the registry to secure uploads, generated by default
-	HTTPSecret string `json:"httpSecret"`
-
-	// Proxy defines the proxy to be used when calling master api, upstream registries, etc
-	Proxy ImageRegistryConfigProxy `json:"proxy"`
-
-	// Storage details for configuring registry storage, e.g. S3 bucket coordinates.
-	Storage ImageRegistryConfigStorage `json:"storage"`
-
-	// ReadOnly indicates whether the registry instance should reject attempts
-	// to push new images or delete existing ones.
-	ReadOnly bool `json:"readOnly"`
-
-	// Requests controls how many parallel requests a given registry instance will handle before queuing additional requests
-	Requests ImageRegistryConfigRequests `json:"requests"`
-
-	// DefaultRoute indicates whether an external facing route for the registry
-	// should be created using the default generated hostname
-	DefaultRoute bool `json:"defaultRoute"`
-
-	// Routes defines additional external facing routes which should be created for the registry
-	Routes []ImageRegistryConfigRoute `json:"routes,omitempty"`
-
-	// Replicas determines the number of registry instances to run
-	Replicas int32 `json:"replicas"`
-
-	// LogLevel determines the level of logging enabled in the registry
-	LogLevel int64 `json:"logging"`
-
-	// Resources defines the resource requests+limits for the registry pod
-	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
-
-	// NodeSelector defines the node selection constraints for the registry pod
-	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
-
-	// Tolerations defines the tolerations for the registry pod
-	Tolerations []corev1.Toleration `json:"tolerations,omitempty"`
+	ManagementState	operatorsv1api.ManagementState	`json:"managementState"`
+	HTTPSecret	string				`json:"httpSecret"`
+	Proxy		ImageRegistryConfigProxy	`json:"proxy"`
+	Storage		ImageRegistryConfigStorage	`json:"storage"`
+	ReadOnly	bool				`json:"readOnly"`
+	Requests	ImageRegistryConfigRequests	`json:"requests"`
+	DefaultRoute	bool				`json:"defaultRoute"`
+	Routes		[]ImageRegistryConfigRoute	`json:"routes,omitempty"`
+	Replicas	int32				`json:"replicas"`
+	LogLevel	int64				`json:"logging"`
+	Resources	*corev1.ResourceRequirements	`json:"resources,omitempty"`
+	NodeSelector	map[string]string		`json:"nodeSelector,omitempty"`
+	Tolerations	[]corev1.Toleration		`json:"tolerations,omitempty"`
 }
-
 type ImageRegistryStatus struct {
-	operatorsv1api.OperatorStatus `json:",inline"`
-
-	// StorageManaged is a boolean which denotes whether or not
-	// we created the registry storage medium (such as an
-	// S3 bucket)
-	StorageManaged bool `json:"storageManaged"`
-
-	// Storage indicates the current applied storage configuration of the registry
-	Storage ImageRegistryConfigStorage `json:"storage"`
+	operatorsv1api.OperatorStatus	`json:",inline"`
+	StorageManaged			bool				`json:"storageManaged"`
+	Storage				ImageRegistryConfigStorage	`json:"storage"`
 }
-
 type ImageRegistryConfigProxy struct {
-	HTTP    string `json:"http"`
-	HTTPS   string `json:"https"`
-	NoProxy string `json:"noProxy"`
+	HTTP	string	`json:"http"`
+	HTTPS	string	`json:"https"`
+	NoProxy	string	`json:"noProxy"`
 }
-
-// ImageRegistryConfigStorageS3CloudFront holds the configuration
-// to use Amazon Cloudfront as the storage middleware in a registry.
-// https://docs.docker.com/registry/configuration/#cloudfront
 type ImageRegistryConfigStorageS3CloudFront struct {
-	// BaseURL contains the SCHEME://HOST[/PATH] at which Cloudfront is served.
-	BaseURL string `json:"baseURL"`
-	// PrivateKey points to secret containing the private key, provided by AWS.
-	PrivateKey corev1.SecretKeySelector `json:"privateKey"`
-	// KeypairID is key pair ID provided by AWS.
-	KeypairID string `json:"keypairID"`
-	// Duration is the duration of the Cloudfront session (optional).
-	Duration metav1.Duration `json:"duration"`
+	BaseURL		string				`json:"baseURL"`
+	PrivateKey	corev1.SecretKeySelector	`json:"privateKey"`
+	KeypairID	string				`json:"keypairID"`
+	Duration	metav1.Duration			`json:"duration"`
 }
-
-type ImageRegistryConfigStorageEmptyDir struct {
-}
-
-// ImageRegistryConfigStorageS3 holds the information to configure
-// the registry to use the AWS S3 service for backend storage
-// https://docs.docker.com/registry/storage-drivers/s3/
+type ImageRegistryConfigStorageEmptyDir struct{}
 type ImageRegistryConfigStorageS3 struct {
-	// Bucket is the bucket name in which you want to store the registry's data
-	// Optional, will be generated if not provided
-	Bucket string `json:"bucket"`
-	// Region is the AWS region in which your bucket exists
-	// Optional, will be set based on the installed AWS Region
-	Region string `json:"region"`
-	// RegionEndpoint is the endpoint for S3 compatible storage services
-	// Optional, defaults based on the Region that is provided
-	RegionEndpoint string `json:"regionEndpoint"`
-	// Encrypt specifies whether the registry stores the image in encrypted format or not
-	// Optional, defaults to false
-	Encrypt bool `json:"encrypt"`
-	// KeyID is the KMS key ID to use for encryption
-	// Optional, Encrypt must be true, or this parameter is ignored
-	KeyID string `json:"keyID"`
-	// CloudFront configures Amazon Cloudfront as the storage middleware in a registry.
-	CloudFront *ImageRegistryConfigStorageS3CloudFront `json:"cloudFront,omitempty"`
+	Bucket		string					`json:"bucket"`
+	Region		string					`json:"region"`
+	RegionEndpoint	string					`json:"regionEndpoint"`
+	Encrypt		bool					`json:"encrypt"`
+	KeyID		string					`json:"keyID"`
+	CloudFront	*ImageRegistryConfigStorageS3CloudFront	`json:"cloudFront,omitempty"`
 }
-
 type ImageRegistryConfigStorageSwift struct {
-	AuthURL   string `json:"authURL"`
-	Container string `json:"container"`
-	Domain    string `json:"domain"`
-	DomainID  string `json:"domainID"`
-	Tenant    string `json:"tenant"`
-	TenantID  string `json:"tenantID"`
+	AuthURL		string	`json:"authURL"`
+	Container	string	`json:"container"`
+	Domain		string	`json:"domain"`
+	DomainID	string	`json:"domainID"`
+	Tenant		string	`json:"tenant"`
+	TenantID	string	`json:"tenantID"`
 }
-
 type ImageRegistryConfigStoragePVC struct {
 	Claim string `json:"claim"`
 }
-
-// ImageRegistryConfigStorage describes how the storage should be configured
-// for the image registry.
 type ImageRegistryConfigStorage struct {
-	// EmptyDir represents ephemeral storage on the pod's host node.
-	// This storage cannot be used with more than 1 replica and is not suitable
-	// for production use. When the pod is removed from a node for any reason,
-	// the data in the emptyDir is deleted forever.
-	// This configuration is EXPERIMENTAL and is subject to change without notice.
-	EmptyDir *ImageRegistryConfigStorageEmptyDir `json:"emptyDir,omitempty"`
-	// S3 represents configuration that uses Amazon Simple Storage Service.
-	S3 *ImageRegistryConfigStorageS3 `json:"s3,omitempty"`
-	// Swift represents configuration that uses OpenStack Object Storage.
-	// This configuration is EXPERIMENTAL and is subject to change without notice.
-	Swift *ImageRegistryConfigStorageSwift `json:"swift,omitempty"`
-	// PVC represents configuration that uses a PersistentVolumeClaim.
-	PVC *ImageRegistryConfigStoragePVC `json:"pvc,omitempty"`
+	EmptyDir	*ImageRegistryConfigStorageEmptyDir	`json:"emptyDir,omitempty"`
+	S3		*ImageRegistryConfigStorageS3		`json:"s3,omitempty"`
+	Swift		*ImageRegistryConfigStorageSwift	`json:"swift,omitempty"`
+	PVC		*ImageRegistryConfigStoragePVC		`json:"pvc,omitempty"`
 }
-
 type ImageRegistryConfigRequests struct {
-	Read  ImageRegistryConfigRequestsLimits `json:"read"`
-	Write ImageRegistryConfigRequestsLimits `json:"write"`
+	Read	ImageRegistryConfigRequestsLimits	`json:"read"`
+	Write	ImageRegistryConfigRequestsLimits	`json:"write"`
 }
-
 type ImageRegistryConfigRequestsLimits struct {
-
-	// MaxRunning sets the maximum in flight api requests to the registry
-	MaxRunning int `json:"maxRunning"`
-
-	// MaxInQueue sets the maximum queued api requests to the registry
-	MaxInQueue int `json:"maxInQueue"`
-
-	// MaxWaitInQueue sets the maximum time a request can wait in the queue
-	// before being rejected
-	MaxWaitInQueue metav1.Duration `json:"maxWaitInQueue"`
+	MaxRunning	int		`json:"maxRunning"`
+	MaxInQueue	int		`json:"maxInQueue"`
+	MaxWaitInQueue	metav1.Duration	`json:"maxWaitInQueue"`
 }
-
 type ImageRegistryConfigRoute struct {
-
-	// Name of the route to be created
-	Name string `json:"name"`
-
-	// Hostname for the route
-	Hostname string `json:"hostname"`
-
-	// SecretName points to secret containing the certificates to be used
-	// by the route
-	SecretName string `json:"secretName"`
+	Name		string	`json:"name"`
+	Hostname	string	`json:"hostname"`
+	SecretName	string	`json:"secretName"`
 }

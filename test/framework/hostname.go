@@ -4,17 +4,16 @@ import (
 	"strings"
 	"testing"
 	"time"
-
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
-
 	configapiv1 "github.com/openshift/api/config/v1"
-
 	imageregistryv1 "github.com/openshift/cluster-image-registry-operator/pkg/apis/imageregistry/v1"
 )
 
 func MustEnsureDefaultExternalRegistryHostnameIsSet(t *testing.T, client *Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var cfg *configapiv1.Image
 	var err error
 	externalHosts := []string{}
@@ -32,7 +31,6 @@ func MustEnsureDefaultExternalRegistryHostnameIsSet(t *testing.T, client *Client
 			return false, nil
 		}
 		externalHosts = cfg.Status.ExternalRegistryHostnames
-
 		for _, h := range externalHosts {
 			if strings.HasPrefix(h, imageregistryv1.DefaultRouteName+"-"+imageregistryv1.ImageRegistryOperatorNamespace) {
 				return true, nil
@@ -44,8 +42,9 @@ func MustEnsureDefaultExternalRegistryHostnameIsSet(t *testing.T, client *Client
 		t.Fatalf("cluster image config resource was not updated with default external registry hostname: %v, err: %v", externalHosts, err)
 	}
 }
-
 func EnsureExternalRegistryHostnamesAreSet(t *testing.T, client *Clientset, wantedHostnames []string) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var cfg *configapiv1.Image
 	var err error
 	err = wait.Poll(1*time.Second, AsyncOperationTimeout, func() (bool, error) {
@@ -61,7 +60,6 @@ func EnsureExternalRegistryHostnamesAreSet(t *testing.T, client *Clientset, want
 		if cfg == nil {
 			return false, nil
 		}
-
 		for _, wh := range wantedHostnames {
 			found := false
 			for _, h := range cfg.Status.ExternalRegistryHostnames {
