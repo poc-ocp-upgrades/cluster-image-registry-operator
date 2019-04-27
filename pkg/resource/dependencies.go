@@ -16,9 +16,13 @@ type dependencies struct {
 func newDependencies() *dependencies {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &dependencies{configMaps: make(map[string]struct{}), secrets: make(map[string]struct{})}
 }
 func (d *dependencies) AddConfigMap(name string) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	d.configMaps[name] = struct{}{}
@@ -26,9 +30,13 @@ func (d *dependencies) AddConfigMap(name string) {
 func (d *dependencies) AddSecret(name string) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	d.secrets[name] = struct{}{}
 }
 func (d dependencies) Checksum(configMapLister corelisters.ConfigMapNamespaceLister, secretLister corelisters.SecretNamespaceLister) (string, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	var names []string

@@ -12,6 +12,8 @@ import (
 func Override(o, n runtime.Object) (bool, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	oval := reflect.Indirect(reflect.ValueOf(o))
 	nval := reflect.Indirect(reflect.ValueOf(n))
 	typ := oval.Type()

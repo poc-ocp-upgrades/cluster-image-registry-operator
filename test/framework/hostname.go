@@ -14,6 +14,8 @@ import (
 func MustEnsureDefaultExternalRegistryHostnameIsSet(t *testing.T, client *Clientset) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var cfg *configapiv1.Image
 	var err error
 	externalHosts := []string{}
@@ -43,6 +45,8 @@ func MustEnsureDefaultExternalRegistryHostnameIsSet(t *testing.T, client *Client
 	}
 }
 func EnsureExternalRegistryHostnamesAreSet(t *testing.T, client *Clientset, wantedHostnames []string) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	var cfg *configapiv1.Image

@@ -26,6 +26,8 @@ type Mutator interface {
 func Name(o Getter) string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	name := fmt.Sprintf("%T, ", o.Type())
 	if namespace := o.GetNamespace(); namespace != "" {
 		name += fmt.Sprintf("Namespace=%s, ", namespace)
@@ -42,6 +44,8 @@ type expecter interface {
 func commonCreate(gen expecter, create func(obj runtime.Object) (runtime.Object, error)) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	o := gen.Type()
 	n, err := gen.expected()
 	if err != nil {
@@ -55,6 +59,8 @@ func commonCreate(gen expecter, create func(obj runtime.Object) (runtime.Object,
 	return err
 }
 func commonUpdate(gen expecter, o runtime.Object, update func(obj runtime.Object) (runtime.Object, error)) (bool, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	n, err := gen.expected()

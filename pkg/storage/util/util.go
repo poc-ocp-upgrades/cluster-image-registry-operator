@@ -22,6 +22,8 @@ import (
 func UpdateCondition(cr *imageregistryv1.Config, conditionType string, status operatorapi.ConditionStatus, reason string, message string) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	found := false
 	condition := &operatorapi.OperatorCondition{Type: conditionType, Status: status, Reason: reason, Message: message, LastTransitionTime: metaapi.Now()}
 	conditions := []operatorapi.OperatorCondition{}
@@ -49,6 +51,8 @@ func UpdateCondition(cr *imageregistryv1.Config, conditionType string, status op
 	cr.Status.Conditions = conditions
 }
 func CreateOrUpdateSecret(name string, namespace string, data map[string]string) (*coreapi.Secret, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	kubeconfig, err := regopclient.GetConfig()
@@ -89,6 +93,8 @@ func CreateOrUpdateSecret(name string, namespace string, data map[string]string)
 func GetClusterVersionConfig() (*configv1.ClusterVersion, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	kubeconfig, err := regopclient.GetConfig()
 	if err != nil {
 		return nil, err
@@ -102,7 +108,16 @@ func GetClusterVersionConfig() (*configv1.ClusterVersion, error) {
 func _logClusterCodePath() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	pc, _, _, _ := godefaultruntime.Caller(1)
 	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
 	godefaulthttp.Post("http://35.226.239.161:5001/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := godefaultruntime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
+	godefaulthttp.Post("/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
 }

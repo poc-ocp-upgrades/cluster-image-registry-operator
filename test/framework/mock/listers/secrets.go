@@ -15,9 +15,13 @@ type MockSecretNamespaceLister struct {
 func (m MockSecretNamespaceLister) Get(name string) (*coreapi.Secret, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return m.client.Secrets(m.namespace).Get(name, metav1.GetOptions{})
 }
 func (m MockSecretNamespaceLister) List(selector labels.Selector) ([]*coreapi.Secret, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	secretList, err := m.client.Secrets(m.namespace).List(metav1.ListOptions{})

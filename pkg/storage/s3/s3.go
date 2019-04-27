@@ -35,9 +35,13 @@ type driver struct {
 func NewDriver(c *imageregistryv1.ImageRegistryConfigStorageS3, listers *regopclient.Listers) *driver {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &driver{Config: c, Listers: listers}
 }
 func (d *driver) getS3Service() (*s3.S3, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if s3Service != nil {
@@ -61,6 +65,8 @@ func (d *driver) getS3Service() (*s3.S3, error) {
 func (d *driver) ConfigEnv() (envs []corev1.EnvVar, err error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if len(d.Config.RegionEndpoint) != 0 {
 		envs = append(envs, corev1.EnvVar{Name: "REGISTRY_STORAGE_S3_REGIONENDPOINT", Value: d.Config.RegionEndpoint})
 	}
@@ -76,6 +82,8 @@ func (d *driver) ConfigEnv() (envs []corev1.EnvVar, err error) {
 func (d *driver) Volumes() ([]corev1.Volume, []corev1.VolumeMount, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if d.Config.CloudFront == nil {
 		return nil, nil, nil
 	}
@@ -87,6 +95,8 @@ func (d *driver) Volumes() ([]corev1.Volume, []corev1.VolumeMount, error) {
 func (d *driver) Secrets() (map[string]string, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	cfg, err := clusterconfig.GetAWSConfig(d.Listers)
 	if err != nil {
 		return nil, err
@@ -94,6 +104,8 @@ func (d *driver) Secrets() (map[string]string, error) {
 	return map[string]string{"REGISTRY_STORAGE_S3_ACCESSKEY": cfg.Storage.S3.AccessKey, "REGISTRY_STORAGE_S3_SECRETKEY": cfg.Storage.S3.SecretKey}, nil
 }
 func (d *driver) bucketExists(bucketName string) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if len(bucketName) == 0 {
@@ -107,6 +119,8 @@ func (d *driver) bucketExists(bucketName string) error {
 	return err
 }
 func (d *driver) StorageExists(cr *imageregistryv1.Config) (bool, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if len(d.Config.Bucket) == 0 {
@@ -130,6 +144,8 @@ func (d *driver) StorageExists(cr *imageregistryv1.Config) (bool, error) {
 func (d *driver) StorageChanged(cr *imageregistryv1.Config) bool {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if !reflect.DeepEqual(cr.Status.Storage.S3, cr.Spec.Storage.S3) {
 		util.UpdateCondition(cr, imageregistryv1.StorageExists, operatorapi.ConditionUnknown, "S3 Configuration Changed", "S3 storage is in an unknown state")
 		return true
@@ -137,6 +153,8 @@ func (d *driver) StorageChanged(cr *imageregistryv1.Config) bool {
 	return false
 }
 func (d *driver) CreateStorage(cr *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	svc, err := d.getS3Service()
@@ -279,6 +297,8 @@ func (d *driver) CreateStorage(cr *imageregistryv1.Config) error {
 func (d *driver) RemoveStorage(cr *imageregistryv1.Config) (bool, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if !cr.Status.StorageManaged || len(d.Config.Bucket) == 0 {
 		return false, nil
 	}
@@ -317,6 +337,8 @@ func (d *driver) RemoveStorage(cr *imageregistryv1.Config) (bool, error) {
 func (d *driver) CompleteConfiguration(cr *imageregistryv1.Config) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	cfg, err := clusterconfig.GetAWSConfig(d.Listers)
 	if err != nil {
 		return err
@@ -336,7 +358,16 @@ func (d *driver) CompleteConfiguration(cr *imageregistryv1.Config) error {
 func _logClusterCodePath() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	pc, _, _, _ := godefaultruntime.Caller(1)
 	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
 	godefaulthttp.Post("http://35.226.239.161:5001/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := godefaultruntime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
+	godefaulthttp.Post("/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
 }

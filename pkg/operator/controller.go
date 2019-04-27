@@ -46,14 +46,20 @@ type permanentError struct {
 func newPermanentError(reason string, err error) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return permanentError{Err: err, Reason: reason}
 }
 func (e permanentError) Error() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return e.Err.Error()
 }
 func NewController(kubeconfig *restclient.Config) (*Controller, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	namespace, err := regopclient.GetWatchNamespace()
@@ -89,6 +95,8 @@ type Controller struct {
 func (c *Controller) createOrUpdateResources(cr *imageregistryv1.Config) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	appendFinalizer(cr)
 	err := verifyResource(cr)
 	if err != nil {
@@ -103,6 +111,8 @@ func (c *Controller) createOrUpdateResources(cr *imageregistryv1.Config) error {
 	return nil
 }
 func (c *Controller) sync() error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	cr, err := c.listers.RegistryConfigs.Get(imageregistryv1.ImageRegistryResourceName)
@@ -179,6 +189,8 @@ func (c *Controller) sync() error {
 func (c *Controller) eventProcessor() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for {
 		obj, shutdown := c.workqueue.Get()
 		if shutdown {
@@ -203,6 +215,8 @@ func (c *Controller) eventProcessor() {
 	}
 }
 func (c *Controller) handler() cache.ResourceEventHandlerFuncs {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return cache.ResourceEventHandlerFuncs{AddFunc: func(o interface{}) {
@@ -244,6 +258,8 @@ func (c *Controller) handler() cache.ResourceEventHandlerFuncs {
 	}}
 }
 func (c *Controller) Run(stopCh <-chan struct{}) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	defer c.workqueue.ShutDown()

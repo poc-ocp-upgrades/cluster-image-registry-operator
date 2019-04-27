@@ -28,9 +28,13 @@ type generatorService struct {
 func newGeneratorService(lister corelisters.ServiceNamespaceLister, client coreset.CoreV1Interface, params *parameters.Globals, cr *imageregistryv1.Config) *generatorService {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &generatorService{lister: lister, client: client, name: params.Service.Name, namespace: params.Deployment.Namespace, labels: params.Deployment.Labels, port: params.Container.Port, secretName: imageregistryv1.ImageRegistryName + "-tls"}
 }
 func (gs *generatorService) Type() runtime.Object {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return &corev1.Service{}
@@ -38,9 +42,13 @@ func (gs *generatorService) Type() runtime.Object {
 func (gs *generatorService) GetGroup() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return corev1.GroupName
 }
 func (gs *generatorService) GetResource() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return "services"
@@ -48,14 +56,20 @@ func (gs *generatorService) GetResource() string {
 func (gs *generatorService) GetNamespace() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.namespace
 }
 func (gs *generatorService) GetName() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.name
 }
 func (gs *generatorService) expected() *corev1.Service {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	svc := &corev1.Service{ObjectMeta: metav1.ObjectMeta{Name: gs.GetName(), Namespace: gs.GetNamespace(), Labels: gs.labels}, Spec: corev1.ServiceSpec{Selector: gs.labels, Ports: []corev1.ServicePort{{Name: fmt.Sprintf("%d-tcp", gs.port), Port: int32(gs.port), Protocol: "TCP", TargetPort: intstr.FromInt(gs.port)}}}}
@@ -65,9 +79,13 @@ func (gs *generatorService) expected() *corev1.Service {
 func (gs *generatorService) Get() (runtime.Object, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.lister.Get(gs.GetName())
 }
 func (gs *generatorService) Create() error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	svc := &corev1.Service{}
@@ -82,6 +100,8 @@ func (gs *generatorService) Create() error {
 func (gs *generatorService) Update(o runtime.Object) (bool, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	svc := o.(*corev1.Service)
 	n := gs.expected()
 	updated, err := strategy.Service(svc, n)
@@ -94,9 +114,13 @@ func (gs *generatorService) Update(o runtime.Object) (bool, error) {
 func (gs *generatorService) Delete(opts *metav1.DeleteOptions) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.client.Services(gs.GetNamespace()).Delete(gs.GetName(), opts)
 }
 func (g *generatorService) Owned() bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return true

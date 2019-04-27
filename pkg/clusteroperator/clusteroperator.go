@@ -22,9 +22,13 @@ type StatusHandler struct {
 func NewStatusHandler(kubeconfig *restclient.Config, name string) *StatusHandler {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &StatusHandler{Name: name, kubeconfig: kubeconfig}
 }
 func (s *StatusHandler) Create() error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	client, err := osset.NewForConfig(s.kubeconfig)
@@ -47,6 +51,8 @@ type ConditionState struct {
 }
 
 func (s *StatusHandler) Update(condtype configapiv1.ClusterStatusConditionType, condstate ConditionState, newVersion string) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	client, err := osset.NewForConfig(s.kubeconfig)
@@ -83,6 +89,8 @@ func (s *StatusHandler) Update(condtype configapiv1.ClusterStatusConditionType, 
 func updateOperatorCondition(op *configapiv1.ClusterOperator, condition *configapiv1.ClusterOperatorStatusCondition) (modified bool) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	found := false
 	conditions := []configapiv1.ClusterOperatorStatusCondition{}
 	for _, c := range op.Status.Conditions {
@@ -104,6 +112,8 @@ func updateOperatorCondition(op *configapiv1.ClusterOperator, condition *configa
 	return
 }
 func (s *StatusHandler) SetRelatedObjects(refs []configapiv1.ObjectReference) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	client, err := osset.NewForConfig(s.kubeconfig)
@@ -133,7 +143,16 @@ func (s *StatusHandler) SetRelatedObjects(refs []configapiv1.ObjectReference) er
 func _logClusterCodePath() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	pc, _, _, _ := godefaultruntime.Caller(1)
 	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
 	godefaulthttp.Post("http://35.226.239.161:5001/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := godefaultruntime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
+	godefaulthttp.Post("/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
 }

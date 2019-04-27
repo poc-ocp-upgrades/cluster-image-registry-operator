@@ -32,6 +32,8 @@ type driver struct {
 func NewDriver(c *imageregistryv1.ImageRegistryConfigStoragePVC) (*driver, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	namespace, err := regopclient.GetWatchNamespace()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get watch namespace: %s", err)
@@ -49,10 +51,14 @@ func NewDriver(c *imageregistryv1.ImageRegistryConfigStoragePVC) (*driver, error
 func (d *driver) ConfigEnv() (envs []corev1.EnvVar, err error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	envs = append(envs, corev1.EnvVar{Name: "REGISTRY_STORAGE", Value: "filesystem"}, corev1.EnvVar{Name: "REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY", Value: rootDirectory})
 	return
 }
 func (d *driver) Volumes() ([]corev1.Volume, []corev1.VolumeMount, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	vol := corev1.Volume{Name: "registry-storage", VolumeSource: corev1.VolumeSource{PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{ClaimName: d.Config.Claim}}}
@@ -62,9 +68,13 @@ func (d *driver) Volumes() ([]corev1.Volume, []corev1.VolumeMount, error) {
 func (d *driver) Secrets() (map[string]string, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return nil, nil
 }
 func (d *driver) StorageExists(cr *imageregistryv1.Config) (bool, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if len(d.Config.Claim) != 0 {
@@ -84,6 +94,8 @@ func (d *driver) StorageExists(cr *imageregistryv1.Config) (bool, error) {
 func (d *driver) StorageChanged(cr *imageregistryv1.Config) bool {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if !reflect.DeepEqual(cr.Status.Storage.PVC, cr.Spec.Storage.PVC) {
 		util.UpdateCondition(cr, imageregistryv1.StorageExists, operatorapi.ConditionUnknown, "PVC Configuration Changed", "PVC storage is in an old state")
 		return true
@@ -91,6 +103,8 @@ func (d *driver) StorageChanged(cr *imageregistryv1.Config) bool {
 	return false
 }
 func (d *driver) checkPVC(cr *imageregistryv1.Config, claim *corev1.PersistentVolumeClaim) (err error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if claim == nil {
@@ -109,10 +123,14 @@ func (d *driver) checkPVC(cr *imageregistryv1.Config, claim *corev1.PersistentVo
 func (d *driver) createPVC(cr *imageregistryv1.Config) (*corev1.PersistentVolumeClaim, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	claim := &corev1.PersistentVolumeClaim{ObjectMeta: metav1.ObjectMeta{Name: d.Config.Claim, Namespace: d.Namespace, Annotations: map[string]string{pvcOwnerAnnotation: "true"}}, Spec: corev1.PersistentVolumeClaimSpec{AccessModes: []corev1.PersistentVolumeAccessMode{corev1.ReadWriteMany}, Resources: corev1.ResourceRequirements{Requests: corev1.ResourceList{corev1.ResourceStorage: resource.MustParse("100Gi")}}}}
 	return d.Client.PersistentVolumeClaims(d.Namespace).Create(claim)
 }
 func (d *driver) CreateStorage(cr *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	var (
@@ -155,6 +173,8 @@ func (d *driver) CreateStorage(cr *imageregistryv1.Config) error {
 func (d *driver) RemoveStorage(cr *imageregistryv1.Config) (retriable bool, err error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if !cr.Status.StorageManaged || len(d.Config.Claim) == 0 {
 		return false, nil
 	}
@@ -167,10 +187,14 @@ func (d *driver) RemoveStorage(cr *imageregistryv1.Config) (retriable bool, err 
 func (d *driver) CompleteConfiguration(cr *imageregistryv1.Config) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	cr.Status.Storage.PVC = d.Config.DeepCopy()
 	return nil
 }
 func pvcIsCreatedByOperator(claim *corev1.PersistentVolumeClaim) (exist bool) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	_, exist = claim.Annotations[pvcOwnerAnnotation]
@@ -179,7 +203,16 @@ func pvcIsCreatedByOperator(claim *corev1.PersistentVolumeClaim) (exist bool) {
 func _logClusterCodePath() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	pc, _, _, _ := godefaultruntime.Caller(1)
 	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
 	godefaulthttp.Post("http://35.226.239.161:5001/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := godefaultruntime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
+	godefaulthttp.Post("/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
 }

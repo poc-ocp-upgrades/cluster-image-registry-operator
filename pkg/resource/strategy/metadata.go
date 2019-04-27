@@ -8,6 +8,8 @@ import (
 func deepCopyMapStringString(m map[string]string) map[string]string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if m == nil {
 		return nil
 	}
@@ -18,6 +20,8 @@ func deepCopyMapStringString(m map[string]string) map[string]string {
 	return c
 }
 func Metadata(oldmeta, newmeta *metav1.ObjectMeta) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	changed := false

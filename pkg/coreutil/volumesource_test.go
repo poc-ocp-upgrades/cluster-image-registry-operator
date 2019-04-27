@@ -8,6 +8,8 @@ import (
 func TestGetVolumeSourceField(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	field, err := GetVolumeSourceField(coreapi.VolumeSource{Secret: &coreapi.SecretVolumeSource{}})
 	if err != nil {
 		t.Fatal(err)

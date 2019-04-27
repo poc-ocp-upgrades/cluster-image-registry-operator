@@ -22,9 +22,13 @@ var _ Logger = &testing.T{}
 func DumpObject(logger Logger, prefix string, obj interface{}) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	logger.Logf("%s:\n%s", prefix, spew.Sdump(obj))
 }
 func DumpYAML(logger Logger, prefix string, obj interface{}) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	data, err := yaml.Marshal(obj)
@@ -34,6 +38,8 @@ func DumpYAML(logger Logger, prefix string, obj interface{}) {
 	logger.Logf("%s:\n%s", prefix, string(data))
 }
 func DeleteCompletely(getObject func() (metav1.Object, error), deleteObject func(*metav1.DeleteOptions) error) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	obj, err := getObject()

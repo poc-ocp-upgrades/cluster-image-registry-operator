@@ -13,6 +13,8 @@ import (
 func MustEnsureDefaultExternalRouteExists(t *testing.T, client *Clientset) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var err error
 	var routes *routeapiv1.RouteList
 	err = wait.Poll(1*time.Second, AsyncOperationTimeout, func() (bool, error) {
@@ -36,6 +38,8 @@ func MustEnsureDefaultExternalRouteExists(t *testing.T, client *Clientset) {
 	}
 }
 func EnsureExternalRoutesExist(t *testing.T, client *Clientset, wantedRoutes []string) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	var err error

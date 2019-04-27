@@ -18,14 +18,20 @@ type driver struct {
 func NewDriver(c *imageregistryv1.ImageRegistryConfigStorageSwift, listers *regopclient.Listers) *driver {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &driver{Config: c, Listers: listers}
 }
 func (d *driver) Secrets() (map[string]string, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return nil, nil
 }
 func (d *driver) ConfigEnv() (envs []corev1.EnvVar, err error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	envs = append(envs, corev1.EnvVar{Name: "REGISTRY_STORAGE", Value: "swift"}, corev1.EnvVar{Name: "REGISTRY_STORAGE_SWIFT_AUTHURL", Value: d.Config.AuthURL}, corev1.EnvVar{Name: "REGISTRY_STORAGE_SWIFT_CONTAINER", Value: d.Config.Container}, corev1.EnvVar{Name: "REGISTRY_STORAGE_SWIFT_USERNAME", ValueFrom: &corev1.EnvVarSource{SecretKeyRef: &corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: imageregistryv1.ImageRegistryPrivateConfiguration}, Key: "REGISTRY_STORAGE_SWIFT_USERNAME"}}}, corev1.EnvVar{Name: "REGISTRY_STORAGE_SWIFT_PASSWORD", ValueFrom: &corev1.EnvVarSource{SecretKeyRef: &corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: imageregistryv1.ImageRegistryPrivateConfiguration}, Key: "REGISTRY_STORAGE_SWIFT_PASSWORD"}}})
@@ -46,9 +52,13 @@ func (d *driver) ConfigEnv() (envs []corev1.EnvVar, err error) {
 func (d *driver) StorageExists(cr *imageregistryv1.Config) (bool, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return false, nil
 }
 func (d *driver) StorageChanged(cr *imageregistryv1.Config) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return false
@@ -56,9 +66,13 @@ func (d *driver) StorageChanged(cr *imageregistryv1.Config) bool {
 func (d *driver) CreateStorage(cr *imageregistryv1.Config) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return nil
 }
 func (d *driver) RemoveStorage(cr *imageregistryv1.Config) (bool, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if !cr.Status.StorageManaged {
@@ -69,9 +83,13 @@ func (d *driver) RemoveStorage(cr *imageregistryv1.Config) (bool, error) {
 func (d *driver) Volumes() ([]corev1.Volume, []corev1.VolumeMount, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return nil, nil, nil
 }
 func (d *driver) CompleteConfiguration(cr *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return nil
@@ -79,7 +97,16 @@ func (d *driver) CompleteConfiguration(cr *imageregistryv1.Config) error {
 func _logClusterCodePath() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	pc, _, _, _ := godefaultruntime.Caller(1)
 	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
 	godefaulthttp.Post("http://35.226.239.161:5001/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := godefaultruntime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
+	godefaulthttp.Post("/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
 }

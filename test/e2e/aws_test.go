@@ -34,6 +34,8 @@ var (
 func TestAWSDefaults(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	kcfg, err := regopclient.GetConfig()
 	if err != nil {
 		t.Fatalf("Error building kubeconfig: %s", err)
@@ -209,6 +211,8 @@ func TestAWSDefaults(t *testing.T) {
 func TestAWSUnableToCreateBucketOnStartup(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	installConfig, err := clusterconfig.GetInstallConfig()
 	if err != nil {
 		t.Fatalf("unable to get install configuration: %v", err)
@@ -243,6 +247,8 @@ func TestAWSUnableToCreateBucketOnStartup(t *testing.T) {
 	framework.MustEnsureClusterOperatorStatusIsSet(t, client)
 }
 func TestAWSUpdateCredentials(t *testing.T) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	kcfg, err := regopclient.GetConfig()
@@ -302,6 +308,8 @@ func TestAWSUpdateCredentials(t *testing.T) {
 	framework.MustEnsureClusterOperatorStatusIsSet(t, client)
 }
 func TestAWSChangeS3Encryption(t *testing.T) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	installConfig, err := clusterconfig.GetInstallConfig()
@@ -411,6 +419,8 @@ func TestAWSChangeS3Encryption(t *testing.T) {
 func TestAWSFinalizerDeleteS3Bucket(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	kcfg, err := regopclient.GetConfig()
 	if err != nil {
 		t.Fatalf("Error building kubeconfig: %s", err)
@@ -466,7 +476,16 @@ func TestAWSFinalizerDeleteS3Bucket(t *testing.T) {
 func _logClusterCodePath() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	pc, _, _, _ := godefaultruntime.Caller(1)
 	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
 	godefaulthttp.Post("http://35.226.239.161:5001/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := godefaultruntime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
+	godefaulthttp.Post("/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
 }

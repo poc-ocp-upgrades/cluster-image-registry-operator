@@ -18,6 +18,8 @@ import (
 func testDefer(t *testing.T, client *framework.Clientset) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if t.Failed() {
 		scList, err := client.StorageClasses().List(metav1.ListOptions{})
 		if err != nil {
@@ -41,6 +43,8 @@ func testDefer(t *testing.T, client *framework.Clientset) {
 	framework.MustRemoveImageRegistry(t, client)
 }
 func createPV(t *testing.T, storageClass string) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
@@ -75,6 +79,8 @@ func createPV(t *testing.T, storageClass string) error {
 func createPVWithStorageClass(t *testing.T) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
 	storageClassList, err := client.StorageClasses().List(metav1.ListOptions{})
 	if err != nil {
@@ -90,6 +96,8 @@ func createPVWithStorageClass(t *testing.T) error {
 func createPVC(t *testing.T, name string) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
 	claim := &corev1.PersistentVolumeClaim{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: imageregistryv1.ImageRegistryOperatorNamespace}, Spec: corev1.PersistentVolumeClaimSpec{AccessModes: []corev1.PersistentVolumeAccessMode{corev1.ReadWriteMany}, Resources: corev1.ResourceRequirements{Requests: corev1.ResourceList{corev1.ResourceStorage: resource.MustParse("1Gi")}}}}
 	_, err := client.PersistentVolumeClaims(imageregistryv1.ImageRegistryOperatorNamespace).Create(claim)
@@ -99,6 +107,8 @@ func createPVC(t *testing.T, name string) error {
 	return nil
 }
 func checkTestResult(t *testing.T, client *framework.Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	framework.MustEnsureImageRegistryIsAvailable(t, client)
@@ -117,6 +127,8 @@ func checkTestResult(t *testing.T, client *framework.Clientset) {
 func TestDefaultPVC(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
 	defer testDefer(t, client)
 	if err := createPV(t, ""); err != nil {
@@ -129,6 +141,8 @@ func TestDefaultPVC(t *testing.T) {
 	checkTestResult(t, client)
 }
 func TestCustomPVC(t *testing.T) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)

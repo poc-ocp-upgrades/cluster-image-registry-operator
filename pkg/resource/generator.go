@@ -26,6 +26,8 @@ import (
 func NewGenerator(kubeconfig *rest.Config, listers *client.Listers, params *parameters.Globals, clusterStatus *clusteroperator.StatusHandler) *Generator {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &Generator{kubeconfig: kubeconfig, listers: listers, params: params, clusterStatus: clusterStatus}
 }
 
@@ -39,6 +41,8 @@ type Generator struct {
 func (g *Generator) listRoutes(routeClient routeset.RouteV1Interface, cr *imageregistryv1.Config) []Mutator {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var mutators []Mutator
 	if cr.Spec.DefaultRoute {
 		mutators = append(mutators, newGeneratorRoute(g.listers.Routes, g.listers.Secrets, routeClient, g.params, cr, imageregistryv1.ImageRegistryConfigRoute{Name: imageregistryv1.DefaultRouteName}))
@@ -49,6 +53,8 @@ func (g *Generator) listRoutes(routeClient routeset.RouteV1Interface, cr *imager
 	return mutators
 }
 func (g *Generator) list(cr *imageregistryv1.Config) ([]Mutator, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	coreClient, err := coreset.NewForConfig(g.kubeconfig)
@@ -91,6 +97,8 @@ func (g *Generator) list(cr *imageregistryv1.Config) ([]Mutator, error) {
 func (g *Generator) syncStorage(cr *imageregistryv1.Config) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var runCreate bool
 	driver, err := storage.NewDriver(&cr.Spec.Storage, g.listers)
 	if err != nil {
@@ -115,6 +123,8 @@ func (g *Generator) syncStorage(cr *imageregistryv1.Config) error {
 	return nil
 }
 func (g *Generator) removeObsoleteRoutes(cr *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	routeClient, err := routeset.NewForConfig(g.kubeconfig)
@@ -148,6 +158,8 @@ func (g *Generator) removeObsoleteRoutes(cr *imageregistryv1.Config) error {
 	return nil
 }
 func (g *Generator) Apply(cr *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	err := g.syncStorage(cr)
@@ -203,6 +215,8 @@ func (g *Generator) Apply(cr *imageregistryv1.Config) error {
 	return nil
 }
 func (g *Generator) Remove(cr *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	generators, err := g.list(cr)

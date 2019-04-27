@@ -10,6 +10,8 @@ import (
 func GetVolumeSourceField(source coreapi.VolumeSource) (reflect.StructField, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	val := reflect.ValueOf(source)
 	var fields []reflect.StructField
 	for i := 0; i < val.NumField(); i++ {

@@ -18,6 +18,8 @@ import (
 func TestPodResourceConfiguration(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
 	defer framework.MustRemoveImageRegistry(t, client)
 	cr := &imageregistryapiv1.Config{TypeMeta: metav1.TypeMeta{APIVersion: imageregistryapiv1.SchemeGroupVersion.String(), Kind: "Config"}, ObjectMeta: metav1.ObjectMeta{Name: imageregistryapiv1.ImageRegistryResourceName}, Spec: imageregistryapiv1.ImageRegistrySpec{ManagementState: operatorapiv1.Managed, Storage: imageregistryapiv1.ImageRegistryConfigStorage{EmptyDir: &imageregistryapiv1.ImageRegistryConfigStorageEmptyDir{}}, Replicas: 1, Resources: &corev1.ResourceRequirements{Limits: corev1.ResourceList{corev1.ResourceMemory: resource.MustParse("512Mi")}}, NodeSelector: map[string]string{"node-role.kubernetes.io/master": ""}, Tolerations: []corev1.Toleration{{Key: "node-role.kubernetes.io/master", Operator: "Exists", Effect: "NoSchedule"}}}}
@@ -47,6 +49,8 @@ func TestPodResourceConfiguration(t *testing.T) {
 func TestPodTolerationsConfiguration(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
 	defer framework.MustRemoveImageRegistry(t, client)
 	tolerations := []corev1.Toleration{{Key: "mykey", Value: "myvalue", Effect: "NoSchedule", Operator: "Equal"}}
@@ -65,6 +69,8 @@ func TestPodTolerationsConfiguration(t *testing.T) {
 func TestRouteConfiguration(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
 	defer framework.MustRemoveImageRegistry(t, client)
 	hostname := "test.example.com"
@@ -78,6 +84,8 @@ func TestRouteConfiguration(t *testing.T) {
 	framework.EnsureExternalRoutesExist(t, client, []string{hostname})
 }
 func TestVersionReporting(t *testing.T) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)

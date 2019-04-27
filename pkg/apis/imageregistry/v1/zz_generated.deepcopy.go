@@ -8,6 +8,8 @@ import (
 func (in *Config) DeepCopyInto(out *Config) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	out.TypeMeta = in.TypeMeta
 	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
@@ -16,6 +18,8 @@ func (in *Config) DeepCopyInto(out *Config) {
 	return
 }
 func (in *Config) DeepCopy() *Config {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -28,12 +32,16 @@ func (in *Config) DeepCopy() *Config {
 func (in *Config) DeepCopyObject() runtime.Object {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if c := in.DeepCopy(); c != nil {
 		return c
 	}
 	return nil
 }
 func (in *ConfigList) DeepCopyInto(out *ConfigList) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	*out = *in
@@ -51,6 +59,8 @@ func (in *ConfigList) DeepCopyInto(out *ConfigList) {
 func (in *ConfigList) DeepCopy() *ConfigList {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if in == nil {
 		return nil
 	}
@@ -61,6 +71,8 @@ func (in *ConfigList) DeepCopy() *ConfigList {
 func (in *ConfigList) DeepCopyObject() runtime.Object {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if c := in.DeepCopy(); c != nil {
 		return c
 	}
@@ -69,10 +81,14 @@ func (in *ConfigList) DeepCopyObject() runtime.Object {
 func (in *ImageRegistryConfigProxy) DeepCopyInto(out *ImageRegistryConfigProxy) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	return
 }
 func (in *ImageRegistryConfigProxy) DeepCopy() *ImageRegistryConfigProxy {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -85,12 +101,16 @@ func (in *ImageRegistryConfigProxy) DeepCopy() *ImageRegistryConfigProxy {
 func (in *ImageRegistryConfigRequests) DeepCopyInto(out *ImageRegistryConfigRequests) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	out.Read = in.Read
 	out.Write = in.Write
 	return
 }
 func (in *ImageRegistryConfigRequests) DeepCopy() *ImageRegistryConfigRequests {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -103,11 +123,15 @@ func (in *ImageRegistryConfigRequests) DeepCopy() *ImageRegistryConfigRequests {
 func (in *ImageRegistryConfigRequestsLimits) DeepCopyInto(out *ImageRegistryConfigRequestsLimits) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	out.MaxWaitInQueue = in.MaxWaitInQueue
 	return
 }
 func (in *ImageRegistryConfigRequestsLimits) DeepCopy() *ImageRegistryConfigRequestsLimits {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -120,10 +144,14 @@ func (in *ImageRegistryConfigRequestsLimits) DeepCopy() *ImageRegistryConfigRequ
 func (in *ImageRegistryConfigRoute) DeepCopyInto(out *ImageRegistryConfigRoute) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	return
 }
 func (in *ImageRegistryConfigRoute) DeepCopy() *ImageRegistryConfigRoute {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -134,6 +162,8 @@ func (in *ImageRegistryConfigRoute) DeepCopy() *ImageRegistryConfigRoute {
 	return out
 }
 func (in *ImageRegistryConfigStorage) DeepCopyInto(out *ImageRegistryConfigStorage) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	*out = *in
@@ -162,6 +192,8 @@ func (in *ImageRegistryConfigStorage) DeepCopyInto(out *ImageRegistryConfigStora
 func (in *ImageRegistryConfigStorage) DeepCopy() *ImageRegistryConfigStorage {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if in == nil {
 		return nil
 	}
@@ -172,10 +204,14 @@ func (in *ImageRegistryConfigStorage) DeepCopy() *ImageRegistryConfigStorage {
 func (in *ImageRegistryConfigStorageEmptyDir) DeepCopyInto(out *ImageRegistryConfigStorageEmptyDir) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	return
 }
 func (in *ImageRegistryConfigStorageEmptyDir) DeepCopy() *ImageRegistryConfigStorageEmptyDir {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -188,10 +224,14 @@ func (in *ImageRegistryConfigStorageEmptyDir) DeepCopy() *ImageRegistryConfigSto
 func (in *ImageRegistryConfigStoragePVC) DeepCopyInto(out *ImageRegistryConfigStoragePVC) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	return
 }
 func (in *ImageRegistryConfigStoragePVC) DeepCopy() *ImageRegistryConfigStoragePVC {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -202,6 +242,8 @@ func (in *ImageRegistryConfigStoragePVC) DeepCopy() *ImageRegistryConfigStorageP
 	return out
 }
 func (in *ImageRegistryConfigStorageS3) DeepCopyInto(out *ImageRegistryConfigStorageS3) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	*out = *in
@@ -215,6 +257,8 @@ func (in *ImageRegistryConfigStorageS3) DeepCopyInto(out *ImageRegistryConfigSto
 func (in *ImageRegistryConfigStorageS3) DeepCopy() *ImageRegistryConfigStorageS3 {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if in == nil {
 		return nil
 	}
@@ -225,12 +269,16 @@ func (in *ImageRegistryConfigStorageS3) DeepCopy() *ImageRegistryConfigStorageS3
 func (in *ImageRegistryConfigStorageS3CloudFront) DeepCopyInto(out *ImageRegistryConfigStorageS3CloudFront) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	in.PrivateKey.DeepCopyInto(&out.PrivateKey)
 	out.Duration = in.Duration
 	return
 }
 func (in *ImageRegistryConfigStorageS3CloudFront) DeepCopy() *ImageRegistryConfigStorageS3CloudFront {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -243,10 +291,14 @@ func (in *ImageRegistryConfigStorageS3CloudFront) DeepCopy() *ImageRegistryConfi
 func (in *ImageRegistryConfigStorageSwift) DeepCopyInto(out *ImageRegistryConfigStorageSwift) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	return
 }
 func (in *ImageRegistryConfigStorageSwift) DeepCopy() *ImageRegistryConfigStorageSwift {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {
@@ -257,6 +309,8 @@ func (in *ImageRegistryConfigStorageSwift) DeepCopy() *ImageRegistryConfigStorag
 	return out
 }
 func (in *ImageRegistrySpec) DeepCopyInto(out *ImageRegistrySpec) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	*out = *in
@@ -292,6 +346,8 @@ func (in *ImageRegistrySpec) DeepCopyInto(out *ImageRegistrySpec) {
 func (in *ImageRegistrySpec) DeepCopy() *ImageRegistrySpec {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if in == nil {
 		return nil
 	}
@@ -302,12 +358,16 @@ func (in *ImageRegistrySpec) DeepCopy() *ImageRegistrySpec {
 func (in *ImageRegistryStatus) DeepCopyInto(out *ImageRegistryStatus) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	*out = *in
 	in.OperatorStatus.DeepCopyInto(&out.OperatorStatus)
 	in.Storage.DeepCopyInto(&out.Storage)
 	return
 }
 func (in *ImageRegistryStatus) DeepCopy() *ImageRegistryStatus {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if in == nil {

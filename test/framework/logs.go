@@ -14,6 +14,8 @@ type PodLog []string
 func (log PodLog) Contains(re *regexp.Regexp) bool {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for _, line := range log {
 		if re.MatchString(line) {
 			return true
@@ -27,6 +29,8 @@ type PodSetLogs map[string]PodLog
 func (psl PodSetLogs) Contains(re *regexp.Regexp) bool {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for _, podlog := range psl {
 		if podlog.Contains(re) {
 			return true
@@ -35,6 +39,8 @@ func (psl PodSetLogs) Contains(re *regexp.Regexp) bool {
 	return false
 }
 func GetLogsByLabelSelector(client *Clientset, namespace string, labelSelector *metav1.LabelSelector) (PodSetLogs, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	selector, err := metav1.LabelSelectorAsSelector(labelSelector)
@@ -69,6 +75,8 @@ func GetLogsByLabelSelector(client *Clientset, namespace string, labelSelector *
 	return podLogs, nil
 }
 func DumpPodLogs(logger Logger, podLogs PodSetLogs) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if len(podLogs) > 0 {

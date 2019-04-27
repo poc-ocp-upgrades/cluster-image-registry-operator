@@ -18,6 +18,8 @@ import (
 func generateLogLevel(cr *v1.Config) string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	switch cr.Spec.LogLevel {
 	case 0:
 		return "error"
@@ -31,6 +33,8 @@ func generateLogLevel(cr *v1.Config) string {
 func generateLivenessProbeConfig(p *parameters.Globals) *corev1.Probe {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	probeConfig := generateProbeConfig(p)
 	probeConfig.InitialDelaySeconds = 10
 	return probeConfig
@@ -38,14 +42,20 @@ func generateLivenessProbeConfig(p *parameters.Globals) *corev1.Probe {
 func generateReadinessProbeConfig(p *parameters.Globals) *corev1.Probe {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return generateProbeConfig(p)
 }
 func generateProbeConfig(p *parameters.Globals) *corev1.Probe {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &corev1.Probe{TimeoutSeconds: int32(p.Healthz.TimeoutSeconds), Handler: corev1.Handler{HTTPGet: &corev1.HTTPGetAction{Scheme: corev1.URISchemeHTTPS, Path: p.Healthz.Route, Port: intstr.FromInt(p.Container.Port)}}}
 }
 func generateSecurityContext(coreClient coreset.CoreV1Interface, namespace string) (*corev1.PodSecurityContext, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	ns, err := coreClient.Namespaces().Get(namespace, metav1.GetOptions{})
@@ -69,6 +79,8 @@ func generateSecurityContext(coreClient coreset.CoreV1Interface, namespace strin
 func storageConfigure(driver storage.Driver) (envs []corev1.EnvVar, volumes []corev1.Volume, mounts []corev1.VolumeMount, err error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	envs, err = driver.ConfigEnv()
 	if err != nil {
 		return
@@ -80,6 +92,8 @@ func storageConfigure(driver storage.Driver) (envs []corev1.EnvVar, volumes []co
 	return
 }
 func makePodTemplateSpec(coreClient coreset.CoreV1Interface, driver storage.Driver, params *parameters.Globals, cr *v1.Config) (corev1.PodTemplateSpec, *dependencies, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	env, volumes, mounts, err := storageConfigure(driver)

@@ -14,6 +14,8 @@ import (
 func updateCondition(cr *imageregistryv1.Config, condtype string, condstate clusteroperator.ConditionState) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	found := false
 	conditions := []operatorapiv1.OperatorCondition{}
 	for _, c := range cr.Status.Conditions {
@@ -42,14 +44,20 @@ func updateCondition(cr *imageregistryv1.Config, condtype string, condstate clus
 func isDeploymentStatusAvailable(deploy *appsapi.Deployment) bool {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return deploy.Status.AvailableReplicas > 0
 }
 func isDeploymentStatusAvailableAndUpdated(deploy *appsapi.Deployment) bool {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return deploy.Status.AvailableReplicas > 0 && deploy.Status.ObservedGeneration >= deploy.Generation && deploy.Status.UpdatedReplicas == deploy.Status.Replicas
 }
 func isDeploymentStatusComplete(deploy *appsapi.Deployment) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	replicas := int32(1)
@@ -59,6 +67,8 @@ func isDeploymentStatusComplete(deploy *appsapi.Deployment) bool {
 	return deploy.Status.UpdatedReplicas == replicas && deploy.Status.Replicas == replicas && deploy.Status.AvailableReplicas == replicas && deploy.Status.ObservedGeneration >= deploy.Generation
 }
 func (c *Controller) setStatusRemoving(cr *imageregistryv1.Config) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	operatorProgressing := clusteroperator.ConditionState{Status: configapiv1.ConditionTrue, Message: "The registry is being removed", Reason: "Removing"}
@@ -71,6 +81,8 @@ func (c *Controller) setStatusRemoving(cr *imageregistryv1.Config) {
 func (c *Controller) setStatusRemoveFailed(cr *imageregistryv1.Config, removeErr error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	operatorFailing := clusteroperator.ConditionState{Status: configapiv1.ConditionTrue, Message: fmt.Sprintf("Unable to remove registry: %s", removeErr), Reason: "RemoveFailed"}
 	err := c.clusterStatus.Update(configapiv1.OperatorFailing, operatorFailing, "")
 	if err != nil {
@@ -79,6 +91,8 @@ func (c *Controller) setStatusRemoveFailed(cr *imageregistryv1.Config, removeErr
 	updateCondition(cr, operatorapiv1.OperatorStatusTypeFailing, operatorFailing)
 }
 func (c *Controller) syncStatus(cr *imageregistryv1.Config, deploy *appsapi.Deployment, applyError error, removed bool) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	setOperatorVersion := false

@@ -8,6 +8,8 @@ import (
 func Service(o, n *corev1.Service) (bool, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	dgst, err := Checksum(n)
 	if err != nil {
 		return false, err

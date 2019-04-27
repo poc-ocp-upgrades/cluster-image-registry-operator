@@ -14,6 +14,8 @@ const (
 func addCompomentOverride(overrides []configv1.ComponentOverride, override configv1.ComponentOverride) ([]configv1.ComponentOverride, bool) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for i, o := range overrides {
 		if o.Group == override.Group && o.Kind == override.Kind && o.Namespace == override.Namespace && o.Name == override.Name {
 			if overrides[i].Unmanaged == override.Unmanaged {
@@ -26,6 +28,8 @@ func addCompomentOverride(overrides []configv1.ComponentOverride, override confi
 	return append(overrides, override), true
 }
 func DisableCVOForOperator(logger Logger, client *Clientset) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	cv, err := client.ClusterVersions().Get(ClusterVersionName, metav1.GetOptions{})

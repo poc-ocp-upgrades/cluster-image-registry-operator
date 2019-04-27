@@ -33,9 +33,13 @@ type generatorImageConfig struct {
 func newGeneratorImageConfig(configLister configlisters.ImageLister, routeLister routelisters.RouteNamespaceLister, serviceLister kcorelisters.ServiceNamespaceLister, configClient configset.ConfigV1Interface, params *parameters.Globals) *generatorImageConfig {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &generatorImageConfig{configLister: configLister, routeLister: routeLister, serviceLister: serviceLister, configClient: configClient, name: params.ImageConfig.Name, namespace: params.Deployment.Namespace, serviceName: params.Service.Name}
 }
 func (gic *generatorImageConfig) Type() runtime.Object {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return &configapi.Image{}
@@ -43,9 +47,13 @@ func (gic *generatorImageConfig) Type() runtime.Object {
 func (gic *generatorImageConfig) GetGroup() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return configapi.GroupName
 }
 func (gic *generatorImageConfig) GetResource() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return "images"
@@ -53,9 +61,13 @@ func (gic *generatorImageConfig) GetResource() string {
 func (gic *generatorImageConfig) GetNamespace() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return ""
 }
 func (gic *generatorImageConfig) GetName() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return gic.name
@@ -63,14 +75,20 @@ func (gic *generatorImageConfig) GetName() string {
 func (gic *generatorImageConfig) Get() (runtime.Object, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gic.configLister.Get(gic.GetName())
 }
 func (gic *generatorImageConfig) objectMeta() metav1.ObjectMeta {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return metav1.ObjectMeta{Name: gic.GetName()}
 }
 func (gic *generatorImageConfig) Create() error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	ic := &configapi.Image{ObjectMeta: gic.objectMeta()}
@@ -92,6 +110,8 @@ func (gic *generatorImageConfig) Create() error {
 	return err
 }
 func (gic *generatorImageConfig) Update(o runtime.Object) (bool, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	ic := o.(*configapi.Image)
@@ -121,14 +141,20 @@ func (gic *generatorImageConfig) Update(o runtime.Object) (bool, error) {
 func (gic *generatorImageConfig) Delete(opts *metav1.DeleteOptions) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gic.configClient.Images().Delete(gic.GetName(), opts)
 }
 func (g *generatorImageConfig) Owned() bool {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return false
 }
 func (gic *generatorImageConfig) getRouteHostnames() ([]string, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	var externalHostnames []string
@@ -160,6 +186,8 @@ func (gic *generatorImageConfig) getRouteHostnames() ([]string, error) {
 	return externalHostnames, nil
 }
 func getServiceHostname(serviceLister kcorelisters.ServiceNamespaceLister, serviceName string) (string, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	svc, err := serviceLister.Get(serviceName)

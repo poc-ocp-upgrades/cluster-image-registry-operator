@@ -9,6 +9,8 @@ import (
 func appendFinalizer(cr *imageregistryv1.Config) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	for i := range cr.ObjectMeta.Finalizers {
 		if cr.ObjectMeta.Finalizers[i] == parameters.ImageRegistryOperatorResourceFinalizer {
 			return
@@ -17,6 +19,8 @@ func appendFinalizer(cr *imageregistryv1.Config) {
 	cr.ObjectMeta.Finalizers = append(cr.ObjectMeta.Finalizers, parameters.ImageRegistryOperatorResourceFinalizer)
 }
 func verifyResource(cr *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if cr.Spec.Replicas < 0 {

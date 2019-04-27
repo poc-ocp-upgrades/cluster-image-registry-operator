@@ -11,12 +11,16 @@ import (
 func startOperator(client *Clientset) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if _, err := client.Deployments(OperatorDeploymentNamespace).Patch(OperatorDeploymentName, types.MergePatchType, []byte(`{"spec": {"replicas": 1}}`)); err != nil {
 		return err
 	}
 	return nil
 }
 func StopDeployment(logger Logger, client *Clientset, operatorDeploymentName, operatorDeploymentNamespace string) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	var err error
@@ -42,9 +46,13 @@ func StopDeployment(logger Logger, client *Clientset, operatorDeploymentName, op
 func GetOperatorLogs(client *Clientset) (PodSetLogs, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return GetLogsByLabelSelector(client, OperatorDeploymentNamespace, &metav1.LabelSelector{MatchLabels: map[string]string{"name": "cluster-image-registry-operator"}})
 }
 func DumpOperatorLogs(logger Logger, client *Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	podLogs, err := GetOperatorLogs(client)

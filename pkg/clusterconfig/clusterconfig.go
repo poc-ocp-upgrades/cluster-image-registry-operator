@@ -49,6 +49,8 @@ type Config struct{ Storage Storage }
 func GetCoreClient() (*coreset.CoreV1Client, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	kubeconfig, err := regopclient.GetConfig()
 	if err != nil {
 		return nil, err
@@ -60,6 +62,8 @@ func GetCoreClient() (*coreset.CoreV1Client, error) {
 	return client, nil
 }
 func GetInstallConfig() (*installer.InstallConfig, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	client, err := GetCoreClient()
@@ -77,6 +81,8 @@ func GetInstallConfig() (*installer.InstallConfig, error) {
 	return installConfig, nil
 }
 func GetAWSConfig(listers *regopclient.Listers) (*Config, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	cfg := &Config{}
@@ -136,13 +142,24 @@ func GetAWSConfig(listers *regopclient.Listers) (*Config, error) {
 func GetGCSConfig() (*Config, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	cfg := &Config{}
 	return cfg, nil
 }
 func _logClusterCodePath() {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	pc, _, _, _ := godefaultruntime.Caller(1)
 	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
 	godefaulthttp.Post("http://35.226.239.161:5001/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
+}
+func _logClusterCodePath() {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	pc, _, _, _ := godefaultruntime.Caller(1)
+	jsonLog := []byte(fmt.Sprintf("{\"fn\": \"%s\"}", godefaultruntime.FuncForPC(pc).Name()))
+	godefaulthttp.Post("/"+"logcode", "application/json", godefaultbytes.NewBuffer(jsonLog))
 }

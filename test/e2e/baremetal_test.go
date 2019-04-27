@@ -17,6 +17,8 @@ const (
 func TestBaremetalDefaults(t *testing.T) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	client := framework.MustNewClientset(t, nil)
 	clusterConfig, err := client.ConfigMaps(installerConfigNamespace).Get(installerConfigName, metav1.GetOptions{})
 	if err != nil {

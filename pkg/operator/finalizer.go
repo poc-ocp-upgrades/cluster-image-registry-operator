@@ -18,10 +18,14 @@ import (
 func (c *Controller) RemoveResources(o *imageregistryv1.Config) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	c.setStatusRemoving(o)
 	return c.generator.Remove(o)
 }
 func (c *Controller) finalizeResources(o *imageregistryv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	if o.ObjectMeta.DeletionTimestamp == nil {

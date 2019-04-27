@@ -24,9 +24,13 @@ type generatorSecret struct {
 func newGeneratorSecret(lister corelisters.SecretNamespaceLister, client coreset.CoreV1Interface, driver storage.Driver, params *parameters.Globals, cr *imageregistryv1.Config) *generatorSecret {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &generatorSecret{lister: lister, client: client, driver: driver, name: imageregistryv1.ImageRegistryPrivateConfiguration, namespace: params.Deployment.Namespace}
 }
 func (gs *generatorSecret) Type() runtime.Object {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return &corev1.Secret{}
@@ -34,9 +38,13 @@ func (gs *generatorSecret) Type() runtime.Object {
 func (gs *generatorSecret) GetGroup() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return corev1.GroupName
 }
 func (gs *generatorSecret) GetResource() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return "secrets"
@@ -44,14 +52,20 @@ func (gs *generatorSecret) GetResource() string {
 func (gs *generatorSecret) GetNamespace() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.namespace
 }
 func (gs *generatorSecret) GetName() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.name
 }
 func (gs *generatorSecret) expected() (runtime.Object, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	sec := &corev1.Secret{ObjectMeta: metav1.ObjectMeta{Name: gs.GetName(), Namespace: gs.GetNamespace()}}
@@ -65,9 +79,13 @@ func (gs *generatorSecret) expected() (runtime.Object, error) {
 func (gs *generatorSecret) Get() (runtime.Object, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.lister.Get(gs.GetName())
 }
 func (gs *generatorSecret) Create() error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return commonCreate(gs, func(obj runtime.Object) (runtime.Object, error) {
@@ -77,6 +95,8 @@ func (gs *generatorSecret) Create() error {
 func (gs *generatorSecret) Update(o runtime.Object) (bool, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return commonUpdate(gs, o, func(obj runtime.Object) (runtime.Object, error) {
 		return gs.client.Secrets(gs.GetNamespace()).Update(obj.(*corev1.Secret))
 	})
@@ -84,9 +104,13 @@ func (gs *generatorSecret) Update(o runtime.Object) (bool, error) {
 func (gs *generatorSecret) Delete(opts *metav1.DeleteOptions) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return gs.client.Secrets(gs.GetNamespace()).Delete(gs.GetName(), opts)
 }
 func (g *generatorSecret) Owned() bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return true

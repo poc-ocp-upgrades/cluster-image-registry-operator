@@ -119,9 +119,13 @@ type generatorNodeCADaemonSet struct {
 func newGeneratorNodeCADaemonSet(daemonSetLister appslisters.DaemonSetNamespaceLister, serviceLister kcorelisters.ServiceNamespaceLister, client appsclientv1.AppsV1Interface, params *parameters.Globals) *generatorNodeCADaemonSet {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return &generatorNodeCADaemonSet{daemonSetLister: daemonSetLister, serviceLister: serviceLister, client: client, params: params}
 }
 func (ds *generatorNodeCADaemonSet) Type() runtime.Object {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return &appsv1.DaemonSet{}
@@ -129,9 +133,13 @@ func (ds *generatorNodeCADaemonSet) Type() runtime.Object {
 func (ds *generatorNodeCADaemonSet) GetGroup() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return appsv1.GroupName
 }
 func (ds *generatorNodeCADaemonSet) GetResource() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return "daemonsets"
@@ -139,9 +147,13 @@ func (ds *generatorNodeCADaemonSet) GetResource() string {
 func (ds *generatorNodeCADaemonSet) GetNamespace() string {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return ds.params.Deployment.Namespace
 }
 func (ds *generatorNodeCADaemonSet) GetName() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return "node-ca"
@@ -149,9 +161,13 @@ func (ds *generatorNodeCADaemonSet) GetName() string {
 func (ds *generatorNodeCADaemonSet) Get() (runtime.Object, error) {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return ds.daemonSetLister.Get(ds.GetName())
 }
 func (ds *generatorNodeCADaemonSet) Create() error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	internalHostname, err := getServiceHostname(ds.serviceLister, ds.params.Service.Name)
@@ -166,6 +182,8 @@ func (ds *generatorNodeCADaemonSet) Create() error {
 	return err
 }
 func (ds *generatorNodeCADaemonSet) Update(o runtime.Object) (bool, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	internalHostname, err := getServiceHostname(ds.serviceLister, ds.params.Service.Name)
@@ -205,9 +223,13 @@ func (ds *generatorNodeCADaemonSet) Update(o runtime.Object) (bool, error) {
 func (ds *generatorNodeCADaemonSet) Delete(opts *metav1.DeleteOptions) error {
 	_logClusterCodePath()
 	defer _logClusterCodePath()
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return ds.client.DaemonSets(ds.GetNamespace()).Delete(ds.GetName(), opts)
 }
 func (ds *generatorNodeCADaemonSet) Owned() bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	_logClusterCodePath()
 	defer _logClusterCodePath()
 	return false
