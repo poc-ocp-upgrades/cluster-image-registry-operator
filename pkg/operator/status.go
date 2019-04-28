@@ -2,18 +2,17 @@ package operator
 
 import (
 	"fmt"
-
 	appsapi "k8s.io/api/apps/v1"
 	metaapi "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	operatorapiv1 "github.com/openshift/api/operator/v1"
 	imageregistryv1 "github.com/openshift/cluster-image-registry-operator/pkg/apis/imageregistry/v1"
 )
 
 func updateCondition(cr *imageregistryv1.Config, condtype string, condstate operatorapiv1.OperatorCondition) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	found := false
 	conditions := []operatorapiv1.OperatorCondition{}
-
 	for _, c := range cr.Status.Conditions {
 		if c.Type != condtype {
 			conditions = append(conditions, c)
@@ -32,61 +31,41 @@ func updateCondition(cr *imageregistryv1.Config, condtype string, condstate oper
 		conditions = append(conditions, c)
 		found = true
 	}
-
 	if !found {
-		conditions = append(conditions, operatorapiv1.OperatorCondition{
-			Type:               condtype,
-			Status:             operatorapiv1.ConditionStatus(condstate.Status),
-			LastTransitionTime: metaapi.Now(),
-			Reason:             condstate.Reason,
-			Message:            condstate.Message,
-		})
+		conditions = append(conditions, operatorapiv1.OperatorCondition{Type: condtype, Status: operatorapiv1.ConditionStatus(condstate.Status), LastTransitionTime: metaapi.Now(), Reason: condstate.Reason, Message: condstate.Message})
 	}
-
 	cr.Status.Conditions = conditions
 }
-
 func isDeploymentStatusAvailable(deploy *appsapi.Deployment) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return deploy.Status.AvailableReplicas > 0
 }
-
 func isDeploymentStatusComplete(deploy *appsapi.Deployment) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	replicas := int32(1)
 	if deploy.Spec.Replicas != nil {
 		replicas = *(deploy.Spec.Replicas)
 	}
-	return deploy.Status.UpdatedReplicas == replicas &&
-		deploy.Status.Replicas == replicas &&
-		deploy.Status.AvailableReplicas == replicas &&
-		deploy.Status.ObservedGeneration >= deploy.Generation
+	return deploy.Status.UpdatedReplicas == replicas && deploy.Status.Replicas == replicas && deploy.Status.AvailableReplicas == replicas && deploy.Status.ObservedGeneration >= deploy.Generation
 }
-
 func (c *Controller) setStatusRemoving(cr *imageregistryv1.Config) {
-	operatorProgressing := operatorapiv1.OperatorCondition{
-		Status:  operatorapiv1.ConditionTrue,
-		Message: "The registry is being removed",
-		Reason:  "Removing",
-	}
-
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	operatorProgressing := operatorapiv1.OperatorCondition{Status: operatorapiv1.ConditionTrue, Message: "The registry is being removed", Reason: "Removing"}
 	updateCondition(cr, operatorapiv1.OperatorStatusTypeProgressing, operatorProgressing)
 }
-
 func (c *Controller) setStatusRemoveFailed(cr *imageregistryv1.Config, removeErr error) {
-	operatorDegraded := operatorapiv1.OperatorCondition{
-		Status:  operatorapiv1.ConditionTrue,
-		Message: fmt.Sprintf("Unable to remove registry: %s", removeErr),
-		Reason:  "RemoveFailed",
-	}
-
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	operatorDegraded := operatorapiv1.OperatorCondition{Status: operatorapiv1.ConditionTrue, Message: fmt.Sprintf("Unable to remove registry: %s", removeErr), Reason: "RemoveFailed"}
 	updateCondition(cr, operatorapiv1.OperatorStatusTypeDegraded, operatorDegraded)
 }
-
 func (c *Controller) syncStatus(cr *imageregistryv1.Config, deploy *appsapi.Deployment, applyError error, removed bool) {
-	operatorAvailable := operatorapiv1.OperatorCondition{
-		Status:  operatorapiv1.ConditionFalse,
-		Message: "",
-		Reason:  "",
-	}
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	operatorAvailable := operatorapiv1.OperatorCondition{Status: operatorapiv1.ConditionFalse, Message: "", Reason: ""}
 	if deploy == nil {
 		operatorAvailable.Message = "The deployment does not exist"
 		operatorAvailable.Reason = "DeploymentNotFound"
@@ -105,14 +84,8 @@ func (c *Controller) syncStatus(cr *imageregistryv1.Config, deploy *appsapi.Depl
 		operatorAvailable.Message = "The registry is ready"
 		operatorAvailable.Reason = "Ready"
 	}
-
 	updateCondition(cr, operatorapiv1.OperatorStatusTypeAvailable, operatorAvailable)
-
-	operatorProgressing := operatorapiv1.OperatorCondition{
-		Status:  operatorapiv1.ConditionTrue,
-		Message: "",
-		Reason:  "",
-	}
+	operatorProgressing := operatorapiv1.OperatorCondition{Status: operatorapiv1.ConditionTrue, Message: "", Reason: ""}
 	if cr.Spec.ManagementState == operatorapiv1.Unmanaged {
 		operatorProgressing.Status = operatorapiv1.ConditionFalse
 		operatorProgressing.Message = "The registry configuration is set to unmanaged mode"
@@ -143,31 +116,18 @@ func (c *Controller) syncStatus(cr *imageregistryv1.Config, deploy *appsapi.Depl
 		operatorProgressing.Message = "The registry is ready"
 		operatorProgressing.Reason = "Ready"
 	}
-
 	updateCondition(cr, operatorapiv1.OperatorStatusTypeProgressing, operatorProgressing)
-
-	operatorDegraded := operatorapiv1.OperatorCondition{
-		Status:  operatorapiv1.ConditionFalse,
-		Message: "",
-		Reason:  "",
-	}
+	operatorDegraded := operatorapiv1.OperatorCondition{Status: operatorapiv1.ConditionFalse, Message: "", Reason: ""}
 	if e, ok := applyError.(permanentError); ok {
 		operatorDegraded.Status = operatorapiv1.ConditionTrue
 		operatorDegraded.Message = applyError.Error()
 		operatorDegraded.Reason = e.Reason
 	}
-
 	updateCondition(cr, operatorapiv1.OperatorStatusTypeDegraded, operatorDegraded)
-
-	operatorRemoved := operatorapiv1.OperatorCondition{
-		Status:  operatorapiv1.ConditionFalse,
-		Message: "",
-		Reason:  "",
-	}
+	operatorRemoved := operatorapiv1.OperatorCondition{Status: operatorapiv1.ConditionFalse, Message: "", Reason: ""}
 	if removed {
 		operatorRemoved.Status = operatorapiv1.ConditionTrue
 		operatorRemoved.Message = "The registry is removed"
 	}
-
 	updateCondition(cr, imageregistryv1.OperatorStatusTypeRemoved, operatorRemoved)
 }

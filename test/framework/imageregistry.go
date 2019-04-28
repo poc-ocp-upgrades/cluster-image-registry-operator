@@ -4,64 +4,66 @@ import (
 	"fmt"
 	"testing"
 	"time"
-
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/util/retry"
-
 	configapiv1 "github.com/openshift/api/config/v1"
 	osapi "github.com/openshift/api/config/v1"
 	operatorapiv1 "github.com/openshift/api/operator/v1"
-
 	imageregistryapiv1 "github.com/openshift/cluster-image-registry-operator/pkg/apis/imageregistry/v1"
 )
 
 const (
-	OperatorDeploymentNamespace = "openshift-image-registry"
-	OperatorDeploymentName      = "cluster-image-registry-operator"
+	OperatorDeploymentNamespace	= "openshift-image-registry"
+	OperatorDeploymentName		= "cluster-image-registry-operator"
 )
 
 type ConditionStatus struct {
-	status *operatorapiv1.ConditionStatus
-	reason string
+	status	*operatorapiv1.ConditionStatus
+	reason	string
 }
 
 func NewConditionStatus(cond operatorapiv1.OperatorCondition) ConditionStatus {
-	return ConditionStatus{
-		status: &cond.Status,
-		reason: cond.Reason,
-	}
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	return ConditionStatus{status: &cond.Status, reason: cond.Reason}
 }
-
 func (cs ConditionStatus) String() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if cs.status == nil {
 		return "<unset>"
 	}
 	return string(*cs.status)
 }
-
 func (cs ConditionStatus) IsTrue() bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return cs.status != nil && *cs.status == operatorapiv1.ConditionTrue
 }
-
 func (cs ConditionStatus) IsFalse() bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return cs.status != nil && *cs.status == operatorapiv1.ConditionFalse
 }
-
 func (cs ConditionStatus) Reason() string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	return cs.reason
 }
 
 type ImageRegistryConditions struct {
-	Available   ConditionStatus
-	Progressing ConditionStatus
-	Degraded    ConditionStatus
-	Removed     ConditionStatus
+	Available	ConditionStatus
+	Progressing	ConditionStatus
+	Degraded	ConditionStatus
+	Removed		ConditionStatus
 }
 
 func GetImageRegistryConditions(cr *imageregistryapiv1.Config) ImageRegistryConditions {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	conds := ImageRegistryConditions{}
 	for _, cond := range cr.Status.Conditions {
 		switch cond.Type {
@@ -77,26 +79,20 @@ func GetImageRegistryConditions(cr *imageregistryapiv1.Config) ImageRegistryCond
 	}
 	return conds
 }
-
 func (c ImageRegistryConditions) String() string {
-	return fmt.Sprintf(
-		"available (%s), progressing (%s), Degraded (%s), removed (%s)",
-		c.Available, c.Progressing, c.Degraded, c.Removed,
-	)
+	_logClusterCodePath()
+	defer _logClusterCodePath()
+	return fmt.Sprintf("available (%s), progressing (%s), Degraded (%s), removed (%s)", c.Available, c.Progressing, c.Degraded, c.Removed)
 }
-
 func ensureImageRegistryToBeRemoved(logger Logger, client *Clientset) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if _, err := client.Configs().Patch(imageregistryapiv1.ImageRegistryResourceName, types.MergePatchType, []byte(`{"spec": {"managementState": "Removed"}}`)); err != nil {
 		if errors.IsNotFound(err) {
-			// That's not exactly what we are asked for. And few seconds later
-			// the operator may bootstrap it. However, if the operator is
-			// disabled, it means the registry is not installed and we're
-			// already in the desired state.
 			return nil
 		}
 		return err
 	}
-
 	var cr *imageregistryapiv1.Config
 	err := wait.Poll(5*time.Second, AsyncOperationTimeout, func() (stop bool, err error) {
 		cr, err = client.Configs().Get(imageregistryapiv1.ImageRegistryResourceName, metav1.GetOptions{})
@@ -106,7 +102,6 @@ func ensureImageRegistryToBeRemoved(logger Logger, client *Clientset) error {
 		} else if err != nil {
 			return false, err
 		}
-
 		conds := GetImageRegistryConditions(cr)
 		logger.Logf("waiting for the registry to be removed: %s", conds)
 		return conds.Progressing.IsFalse() && conds.Removed.IsTrue(), nil
@@ -118,9 +113,9 @@ func ensureImageRegistryToBeRemoved(logger Logger, client *Clientset) error {
 	}
 	return nil
 }
-
 func deleteImageRegistryResource(client *Clientset) error {
-	// TODO(dmage): the finalizer should be removed by the operator
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if err := retry.RetryOnConflict(retry.DefaultBackoff, func() error {
 		cr, err := client.Configs().Get(imageregistryapiv1.ImageRegistryResourceName, metav1.GetOptions{})
 		if errors.IsNotFound(err) {
@@ -134,15 +129,11 @@ func deleteImageRegistryResource(client *Clientset) error {
 	}); err != nil {
 		return err
 	}
-
-	if err := DeleteCompletely(
-		func() (metav1.Object, error) {
-			return client.Configs().Get(imageregistryapiv1.ImageRegistryResourceName, metav1.GetOptions{})
-		},
-		func(deleteOptions *metav1.DeleteOptions) error {
-			return client.Configs().Delete(imageregistryapiv1.ImageRegistryResourceName, deleteOptions)
-		},
-	); err != nil {
+	if err := DeleteCompletely(func() (metav1.Object, error) {
+		return client.Configs().Get(imageregistryapiv1.ImageRegistryResourceName, metav1.GetOptions{})
+	}, func(deleteOptions *metav1.DeleteOptions) error {
+		return client.Configs().Delete(imageregistryapiv1.ImageRegistryResourceName, deleteOptions)
+	}); err != nil {
 		if errors.IsNotFound(err) {
 			return nil
 		}
@@ -150,8 +141,9 @@ func deleteImageRegistryResource(client *Clientset) error {
 	}
 	return nil
 }
-
 func RemoveImageRegistry(logger Logger, client *Clientset) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	logger.Logf("uninstalling the image registry...")
 	if err := ensureImageRegistryToBeRemoved(logger, client); err != nil {
 		return fmt.Errorf("unable to uninstall the image registry: %s", err)
@@ -166,14 +158,16 @@ func RemoveImageRegistry(logger Logger, client *Clientset) error {
 	}
 	return nil
 }
-
 func MustRemoveImageRegistry(t *testing.T, client *Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if err := RemoveImageRegistry(t, client); err != nil {
 		t.Fatal(err)
 	}
 }
-
 func DeployImageRegistry(logger Logger, client *Clientset, cr *imageregistryapiv1.Config) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if cr != nil {
 		logger.Logf("creating the image registry resource...")
 		if _, err := client.Configs().Create(cr); err != nil {
@@ -186,14 +180,16 @@ func DeployImageRegistry(logger Logger, client *Clientset, cr *imageregistryapiv
 	}
 	return nil
 }
-
 func MustDeployImageRegistry(t *testing.T, client *Clientset, cr *imageregistryapiv1.Config) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if err := DeployImageRegistry(t, client, cr); err != nil {
 		t.Fatal(err)
 	}
 }
-
 func DumpImageRegistryResource(logger Logger, client *Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	cr, err := client.Configs().Get(imageregistryapiv1.ImageRegistryResourceName, metav1.GetOptions{})
 	if err != nil {
 		logger.Logf("unable to dump the image registry resource: %s", err)
@@ -201,8 +197,9 @@ func DumpImageRegistryResource(logger Logger, client *Clientset) {
 	}
 	DumpYAML(logger, "the image registry resource", cr)
 }
-
 func ensureImageRegistryIsProcessed(logger Logger, client *Clientset) (*imageregistryapiv1.Config, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var cr *imageregistryapiv1.Config
 	err := wait.Poll(5*time.Second, AsyncOperationTimeout, func() (stop bool, err error) {
 		cr, err = client.Configs().Get(imageregistryapiv1.ImageRegistryResourceName, metav1.GetOptions{})
@@ -213,7 +210,6 @@ func ensureImageRegistryIsProcessed(logger Logger, client *Clientset) (*imagereg
 		} else if err != nil {
 			return false, err
 		}
-
 		conds := GetImageRegistryConditions(cr)
 		logger.Logf("waiting for the registry: %s", conds)
 		return conds.Progressing.IsFalse() && conds.Available.IsTrue() || conds.Degraded.IsTrue(), nil
@@ -225,41 +221,42 @@ func ensureImageRegistryIsProcessed(logger Logger, client *Clientset) (*imagereg
 	}
 	return cr, nil
 }
-
 func MustEnsureImageRegistryIsProcessed(t *testing.T, client *Clientset) *imageregistryapiv1.Config {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	cr, err := ensureImageRegistryIsProcessed(t, client)
 	if err != nil {
 		t.Fatal(err)
 	}
 	return cr
 }
-
 func ensureImageRegistryIsAvailable(logger Logger, client *Clientset) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	logger.Logf("waiting for the operator to deploy the registry...")
-
 	cr, err := ensureImageRegistryIsProcessed(logger, client)
 	if err != nil {
 		return err
 	}
-
 	conds := GetImageRegistryConditions(cr)
 	if conds.Progressing.IsTrue() || conds.Available.IsFalse() {
 		DumpYAML(logger, "the latest observed state of the image registry resource", cr)
 		DumpOperatorLogs(logger, client)
 		return fmt.Errorf("the imageregistry resource is processed, but the the image registry is not available")
 	}
-
 	logger.Logf("the image registry resource reports that the registry is deployed and available")
 	return nil
 }
-
 func MustEnsureImageRegistryIsAvailable(t *testing.T, client *Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if err := ensureImageRegistryIsAvailable(t, client); err != nil {
 		t.Fatal(err)
 	}
 }
-
 func ensureInternalRegistryHostnameIsSet(logger Logger, client *Clientset) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var cfg *configapiv1.Image
 	err := wait.Poll(1*time.Second, AsyncOperationTimeout, func() (bool, error) {
 		var err error
@@ -281,15 +278,16 @@ func ensureInternalRegistryHostnameIsSet(logger Logger, client *Clientset) error
 	}
 	return err
 }
-
 func MustEnsureInternalRegistryHostnameIsSet(t *testing.T, client *Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if err := ensureInternalRegistryHostnameIsSet(t, client); err != nil {
 		t.Fatal(err)
 	}
-
 }
-
 func hasExpectedClusterOperatorConditions(status *configapiv1.ClusterOperator) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	gotAvailable := false
 	gotProgressing := false
 	gotDegraded := false
@@ -306,8 +304,9 @@ func hasExpectedClusterOperatorConditions(status *configapiv1.ClusterOperator) b
 	}
 	return gotAvailable && gotProgressing && gotDegraded
 }
-
 func ensureClusterOperatorStatusIsSet(logger Logger, client *Clientset) error {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	var status *configapiv1.ClusterOperator
 	err := wait.Poll(1*time.Second, AsyncOperationTimeout, func() (stop bool, err error) {
 		status, err = client.ClusterOperators().Get(imageregistryapiv1.ImageRegistryClusterOperatorResourceName, metav1.GetOptions{})
@@ -330,15 +329,16 @@ func ensureClusterOperatorStatusIsSet(logger Logger, client *Clientset) error {
 	}
 	return err
 }
-
 func MustEnsureClusterOperatorStatusIsSet(t *testing.T, client *Clientset) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if err := ensureClusterOperatorStatusIsSet(t, client); err != nil {
 		t.Fatal(err)
 	}
 }
-
 func MustEnsureOperatorIsNotHotLooping(t *testing.T, client *Clientset) {
-	// Allow the operator a few seconds to stabilize
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	time.Sleep(15 * time.Second)
 	var cfg *imageregistryapiv1.Config
 	var err error
@@ -354,9 +354,6 @@ func MustEnsureOperatorIsNotHotLooping(t *testing.T, client *Clientset) {
 		t.Errorf("failed to retrieve registry operator config: %v", err)
 	}
 	oldVersion := cfg.ResourceVersion
-
-	// wait 15s and then ensure that ResourceVersion is not updated. If it was updated then something
-	// is updating the registry config resource when we should be at steady state.
 	time.Sleep(15 * time.Second)
 	err = wait.Poll(1*time.Second, 30*time.Second, func() (stop bool, err error) {
 		cfg, err = client.Configs().Get(imageregistryapiv1.ImageRegistryResourceName, metav1.GetOptions{})

@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
 	coreapi "k8s.io/api/core/v1"
 )
 
 func GetVolumeSourceField(source coreapi.VolumeSource) (reflect.StructField, error) {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	val := reflect.ValueOf(source)
 	var fields []reflect.StructField
 	for i := 0; i < val.NumField(); i++ {
