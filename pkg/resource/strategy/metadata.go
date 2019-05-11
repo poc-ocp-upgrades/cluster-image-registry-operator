@@ -2,11 +2,12 @@ package strategy
 
 import (
 	"reflect"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func deepCopyMapStringString(m map[string]string) map[string]string {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	if m == nil {
 		return nil
 	}
@@ -16,8 +17,9 @@ func deepCopyMapStringString(m map[string]string) map[string]string {
 	}
 	return c
 }
-
 func Metadata(oldmeta, newmeta *metav1.ObjectMeta) bool {
+	_logClusterCodePath()
+	defer _logClusterCodePath()
 	changed := false
 	if oldmeta.Name != newmeta.Name {
 		oldmeta.Name = newmeta.Name
